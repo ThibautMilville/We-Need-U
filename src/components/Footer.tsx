@@ -131,7 +131,7 @@ const Footer: React.FC = () => {
           </p>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <span className="text-sm text-gray-600">
-              Propulsé par Ultra Blockchain
+              Propulsé par Ultra Times
             </span>
             <img 
               src="/logo-ut.png" 

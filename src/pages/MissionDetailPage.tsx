@@ -27,6 +27,7 @@ import { mockMissions } from '../data/mockData';
 import Button from '../components/ui/Button';
 import Card, { CardBody, CardHeader } from '../components/ui/Card';
 import { getMissionImage } from '../utils/missionImages';
+import { useAuth } from '../contexts/AuthContext';
 
 const MissionDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,11 @@ const MissionDetailPage: React.FC = () => {
   const [mission, setMission] = useState<Mission | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'requirements' | 'deliverables'>('overview');
+  const { user } = useAuth();
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [motivation, setMotivation] = useState('');
+  const [applyLoading, setApplyLoading] = useState(false);
+  const [applySuccess, setApplySuccess] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -270,15 +276,18 @@ const MissionDetailPage: React.FC = () => {
                 {activeTab === 'deliverables' && (
                   <div className="space-y-6">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">Livrables attendus</h3>
-                    <div className="space-y-4">
-                      {mission.deliverables.map((deliverable, index) => (
-                        <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 rounded-xl">
-                          <Briefcase className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{deliverable}</span>
-                        </div>
-                      ))}
-                    </div>
-
+                    {mission.deliverables && mission.deliverables.length > 0 ? (
+                      <div className="space-y-4">
+                        {mission.deliverables.map((deliverable, index) => (
+                          <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 rounded-xl">
+                            <Briefcase className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-700">{deliverable}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-gray-500 italic">Aucun livrable précisé pour cette mission.</div>
+                    )}
                     <div className="mt-8 p-6 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl border border-yellow-200">
                       <div className="flex items-start space-x-3">
                         <AlertCircle className="w-6 h-6 text-yellow-600 mt-0.5" />
@@ -315,10 +324,23 @@ const MissionDetailPage: React.FC = () => {
                   </p>
                   
                   <div className="space-y-3">
-                    <Button className="w-full bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 rounded-2xl py-3 font-bold">
-                      <Zap className="w-4 h-4 mr-2" />
-                      Candidater maintenant
-                    </Button>
+                    {user ? (
+                      <Button
+                        className="w-full bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 rounded-2xl py-3 font-bold"
+                        onClick={() => setShowApplyModal(true)}
+                      >
+                        <Zap className="w-4 h-4 mr-2" />
+                        Candidater maintenant
+                      </Button>
+                    ) : (
+                      <Button
+                        className="w-full bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 rounded-2xl py-3 font-bold"
+                        onClick={() => navigate('/login')}
+                      >
+                        <Zap className="w-4 h-4 mr-2" />
+                        Se connecter ou s'inscrire pour postuler
+                      </Button>
+                    )}
                     <Button variant="outline" className="w-full rounded-2xl py-3">
                       <MessageSquare className="w-4 h-4 mr-2" />
                       Poser une question
@@ -401,6 +423,44 @@ const MissionDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {showApplyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setShowApplyModal(false)}>
+          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-full relative animate-fade-in-up" onClick={e => e.stopPropagation()}>
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-700" onClick={() => setShowApplyModal(false)}>
+              <span className="text-2xl">&times;</span>
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Candidater à cette mission</h2>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Explique tes motivations :</label>
+            <textarea
+              className="w-full border border-gray-300 rounded-xl p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              rows={5}
+              value={motivation}
+              onChange={e => setMotivation(e.target.value)}
+              placeholder="Décris pourquoi tu es le candidat idéal pour cette mission..."
+            />
+            <Button
+              className="w-full bg-gradient-to-r from-primary-500 to-secondary-600 text-white font-bold py-3 rounded-2xl mt-2"
+              loading={applyLoading}
+              disabled={!motivation.trim()}
+              onClick={async () => {
+                setApplyLoading(true);
+                setTimeout(() => {
+                  setApplyLoading(false);
+                  setApplySuccess(true);
+                  setShowApplyModal(false);
+                  setMotivation('');
+                }, 1200);
+              }}
+            >
+              Envoyer ma candidature
+            </Button>
+            {applySuccess && (
+              <div className="mt-4 text-green-600 font-semibold">Candidature envoyée avec succès !</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

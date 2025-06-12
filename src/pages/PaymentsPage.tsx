@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { CreditCard, Download, Filter, Calendar } from 'lucide-react';
 import Card, { CardBody, CardHeader } from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { useAuth } from '../contexts/AuthContext';
 
 const PaymentsPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'completed' | 'pending'>('all');
+  const { user } = useAuth();
 
   const payments = [
     {
@@ -47,6 +49,20 @@ const PaymentsPage: React.FC = () => {
     .filter(p => p.status === 'pending')
     .reduce((sum, p) => sum + p.amount, 0);
 
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50">
+        <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center animate-fade-in-up">
+          <h2 className="text-3xl font-bold text-primary-600 mb-4">Accès réservé</h2>
+          <p className="text-gray-600 mb-6">Connecte-toi pour consulter l'historique de tes paiements et tes gains !</p>
+          <Button className="bg-gradient-to-r from-primary-500 to-secondary-600 text-white font-bold py-3 rounded-2xl w-full" onClick={() => window.location.href = '/login'}>
+            Se connecter
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -60,24 +76,22 @@ const PaymentsPage: React.FC = () => {
         </div>
 
         {/* Statistiques */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-fade-in-up">
+          <Card className="bg-gradient-to-br from-green-50 to-emerald-100 border-green-200 shadow-xl">
             <CardBody className="text-center">
               <div className="text-3xl font-bold text-green-600 mb-2">{totalEarned}</div>
               <div className="text-sm text-gray-500">UOS gagnés</div>
             </CardBody>
           </Card>
-
-          <Card>
+          <Card className="bg-gradient-to-br from-yellow-50 to-orange-100 border-yellow-200 shadow-xl">
             <CardBody className="text-center">
               <div className="text-3xl font-bold text-yellow-600 mb-2">{pendingAmount}</div>
               <div className="text-sm text-gray-500">UOS en attente</div>
             </CardBody>
           </Card>
-
-          <Card>
+          <Card className="bg-gradient-to-br from-primary-50 to-primary-100 border-primary-200 shadow-xl">
             <CardBody className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">{totalEarned + pendingAmount}</div>
+              <div className="text-3xl font-bold text-primary-600 mb-2">{totalEarned + pendingAmount}</div>
               <div className="text-sm text-gray-500">Total UOS</div>
             </CardBody>
           </Card>

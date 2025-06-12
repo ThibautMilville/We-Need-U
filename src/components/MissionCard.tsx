@@ -46,10 +46,9 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission, showActions = true }
   };
 
   return (
-    <div className="group relative h-full">
+    <Link to={`/missions/${mission.id}`} className="group relative h-full block focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-3xl">
       {/* Glow effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-500 to-secondary-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition duration-500" />
-      
+      <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition duration-500 pointer-events-none z-0" />
       <Card className="relative bg-white/80 backdrop-blur-xl border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 rounded-3xl overflow-hidden group h-full flex flex-col">
         {/* Mission Image */}
         <div className="relative h-56 overflow-hidden">
@@ -150,9 +149,8 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission, showActions = true }
           {showActions && (
             <div className="pt-2 mt-auto">
               <Button
-                as={Link}
-                to={`/missions/${mission.id}`}
-                className="w-full bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 rounded-2xl py-3 font-bold"
+                as="div"
+                className="w-full bg-gradient-to-r from-primary-500 to-secondary-600 hover:from-primary-600 hover:to-secondary-700 text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 rounded-2xl py-3 font-bold pointer-events-none opacity-80"
               >
                 <div className="flex items-center justify-center space-x-2">
                   <Zap className="w-4 h-4" />
@@ -165,9 +163,9 @@ const MissionCard: React.FC<MissionCardProps> = ({ mission, showActions = true }
         </CardBody>
 
         {/* Hover effect overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none" />
       </Card>
-    </div>
+    </Link>
   );
 };
 

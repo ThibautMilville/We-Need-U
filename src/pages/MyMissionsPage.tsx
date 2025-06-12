@@ -2,9 +2,25 @@ import React, { useState } from 'react';
 import { Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import Card, { CardBody, CardHeader } from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { useAuth } from '../contexts/AuthContext';
 
 const MyMissionsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'active' | 'completed' | 'pending'>('active');
+  const { user } = useAuth();
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50">
+        <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center animate-fade-in-up">
+          <h2 className="text-3xl font-bold text-primary-600 mb-4">Accès réservé</h2>
+          <p className="text-gray-600 mb-6">Connecte-toi pour accéder à tes missions et suivre ta progression !</p>
+          <Button className="bg-gradient-to-r from-primary-500 to-secondary-600 text-white font-bold py-3 rounded-2xl w-full" onClick={() => window.location.href = '/login'}>
+            Se connecter
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,6 +70,28 @@ const MyMissionsPage: React.FC = () => {
               </button>
             </nav>
           </div>
+        </div>
+
+        {/* Dashboard de stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-fade-in-up">
+          <Card className="bg-gradient-to-br from-primary-50 to-primary-100 border-primary-200 shadow-xl">
+            <CardBody className="text-center">
+              <div className="text-3xl font-bold text-primary-600 mb-2">2</div>
+              <div className="text-sm text-gray-500">Missions en cours</div>
+            </CardBody>
+          </Card>
+          <Card className="bg-gradient-to-br from-green-50 to-emerald-100 border-green-200 shadow-xl">
+            <CardBody className="text-center">
+              <div className="text-3xl font-bold text-green-600 mb-2">12</div>
+              <div className="text-sm text-gray-500">Missions terminées</div>
+            </CardBody>
+          </Card>
+          <Card className="bg-gradient-to-br from-yellow-50 to-orange-100 border-yellow-200 shadow-xl">
+            <CardBody className="text-center">
+              <div className="text-3xl font-bold text-yellow-600 mb-2">1</div>
+              <div className="text-sm text-gray-500">Candidature en attente</div>
+            </CardBody>
+          </Card>
         </div>
 
         {/* Contenu des onglets */}

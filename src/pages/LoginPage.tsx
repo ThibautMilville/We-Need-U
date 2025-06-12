@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Card, { CardBody } from '../components/ui/Card';
+import { useUltraWallet } from '../utils/ultraWallet';
 
 const LoginPage: React.FC = () => {
   const { user, login, isLoading } = useAuth();
@@ -14,6 +15,7 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<'admin' | 'manager' | 'user'>('user');
+  const ultraWallet = useUltraWallet();
 
   // Redirect if already logged in
   if (user) {
@@ -56,31 +58,44 @@ const LoginPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Image de fond stylisée */}
+      <img src="/login-bg.jpg" alt="background" className="absolute inset-0 w-full h-full object-cover object-center opacity-60 z-0" />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white/80 to-secondary-100 z-10" />
+      <div className="max-w-md w-full space-y-8 relative z-20">
         {/* Header */}
         <div className="text-center">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center mb-4">
-              <span className="text-white font-bold text-2xl">W</span>
-            </div>
+            <img src="/logo-ut.png" alt="Ultra Times Logo" className="w-16 h-16 object-contain mb-4" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="text-3xl font-bold text-gray-900 drop-shadow-lg">
             Connexion à WeNeedU
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Plateforme de missions Web3 Ultra Times
           </p>
         </div>
-
-        {/* Quick login buttons */}
-        <Card className="p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Connexion rapide (démo)</h3>
-          <div className="grid grid-cols-1 gap-3">
+        {/* Carte de connexion */}
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 space-y-8 animate-fade-in-up">
+          {/* Connexion Ultra Wallet */}
+          <Button
+            variant="outline"
+            className="w-full flex items-center justify-center mb-4"
+            onClick={ultraWallet.connect}
+            loading={ultraWallet.isLoading}
+            disabled={!ultraWallet.isInstalled}
+          >
+            <Wallet className="w-4 h-4 mr-2" />
+            {ultraWallet.isConnected ? 'Wallet connecté' : 'Se connecter avec Ultra Wallet'}
+          </Button>
+          {ultraWallet.error && <div className="text-red-600 text-sm mb-2">{ultraWallet.error}</div>}
+          {/* Quick login buttons */}
+          <div className="space-y-2">
             <Button
               variant="outline"
               onClick={() => handleQuickLogin('admin')}
-              className="justify-start"
+              className="justify-start w-full"
             >
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-error-500 rounded-full mr-3"></div>
@@ -93,7 +108,7 @@ const LoginPage: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => handleQuickLogin('manager')}
-              className="justify-start"
+              className="justify-start w-full"
             >
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-warning-500 rounded-full mr-3"></div>
@@ -106,7 +121,7 @@ const LoginPage: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => handleQuickLogin('user')}
-              className="justify-start"
+              className="justify-start w-full"
             >
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-success-500 rounded-full mr-3"></div>
@@ -117,82 +132,51 @@ const LoginPage: React.FC = () => {
               </div>
             </Button>
           </div>
-        </Card>
-
-        {/* Login form */}
-        <Card>
-          <CardBody>
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              {error && (
-                <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-md">
-                  {error}
-                </div>
-              )}
-
-              <Input
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="votre@email.com"
-              />
-
-              <Input
-                label="Mot de passe"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-              />
-
-              <Button
-                type="submit"
-                className="w-full"
-                loading={loginLoading}
-                disabled={!email || !password}
-              >
-                Se connecter
-              </Button>
-            </form>
-
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Ou connectez votre wallet</span>
-                </div>
+          {/* Login form */}
+          <form className="space-y-6 mt-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-md">
+                {error}
               </div>
-
-              <div className="mt-6">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => alert('Connexion wallet simulée - Feature à venir')}
-                >
-                  <Wallet className="w-4 h-4 mr-2" />
-                  Connecter un wallet Ultra
-                </Button>
-              </div>
-            </div>
-
-            <div className="mt-6 text-center">
-              <p className="text-xs text-gray-600">
-                En vous connectant, vous acceptez nos{' '}
-                <a href="#" className="text-primary-600 hover:text-primary-500">
-                  Conditions d'utilisation
-                </a>{' '}
-                et notre{' '}
-                <a href="#" className="text-primary-600 hover:text-primary-500">
-                  Politique de confidentialité
-                </a>
-              </p>
-            </div>
-          </CardBody>
-        </Card>
+            )}
+            <Input
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="votre@email.com"
+            />
+            <Input
+              label="Mot de passe"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+            />
+            <Button
+              type="submit"
+              className="w-full"
+              loading={loginLoading}
+              disabled={!email || !password}
+            >
+              Se connecter
+            </Button>
+          </form>
+          <div className="mt-6 text-center">
+            <p className="text-xs text-gray-600">
+              En vous connectant, vous acceptez nos{' '}
+              <a href="#" className="text-primary-600 hover:text-primary-500">
+                Conditions d'utilisation
+              </a>{' '}
+              et notre{' '}
+              <a href="#" className="text-primary-600 hover:text-primary-500">
+                Politique de confidentialité
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

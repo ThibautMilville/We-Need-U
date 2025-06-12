@@ -20,28 +20,28 @@ import Card, { CardBody } from '../components/ui/Card';
 const AboutPage: React.FC = () => {
   const teamMembers = [
     {
-      name: "Alex Chen",
-      role: "CEO & Fondateur",
-      image: "https://ui-avatars.com/api/?name=Alex+Chen&background=667eea&color=fff&size=128",
-      description: "Expert en blockchain et gaming, 10+ ans d'expérience"
+      name: "Jean-Charles",
+      role: "Lead",
+      image: "/avatar_jc.jpeg",
+      description: "Visionnaire, leader de l'équipe et expert Ultra."
     },
     {
-      name: "Sarah Martinez",
-      role: "CTO",
-      image: "https://ui-avatars.com/api/?name=Sarah+Martinez&background=f093fb&color=fff&size=128",
-      description: "Développeuse senior Web3, spécialiste Ultra blockchain"
+      name: "Vito Cornelius",
+      role: "Responsable des missions",
+      image: "/vito.jpg",
+      description: "Organisation, gestion et suivi des missions."
     },
     {
-      name: "David Kim",
-      role: "Head of Gaming",
-      image: "https://ui-avatars.com/api/?name=David+Kim&background=4ade80&color=fff&size=128",
-      description: "Game designer et expert en économie gaming"
+      name: "Garstud",
+      role: "Responsable de projets",
+      image: "/garstud.jpg",
+      description: "Coordination des projets et innovation."
     },
     {
-      name: "Emma Wilson",
-      role: "Head of Community",
-      image: "https://ui-avatars.com/api/?name=Emma+Wilson&background=fb923c&color=fff&size=128",
-      description: "Spécialiste communauté gaming et engagement utilisateur"
+      name: "Allego",
+      role: "Spécialiste Smart Contract & Blockchain",
+      image: "/allego.jpg",
+      description: "Développement blockchain et sécurité."
     }
   ];
 
