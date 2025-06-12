@@ -99,7 +99,14 @@ const ProfilePage: React.FC = () => {
               {ultraWallet.isConnected ? (
                 <Button variant="outline" className="w-full" onClick={ultraWallet.disconnect} loading={ultraWallet.isLoading}>Déconnecter le wallet</Button>
               ) : (
-                <Button variant="outline" className="w-full" onClick={ultraWallet.connect} loading={ultraWallet.isLoading}>Connecter le wallet Ultra</Button>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => ultraWallet.connect()}
+                  loading={ultraWallet.isLoading}
+                >
+                  Connecter le wallet Ultra
+                </Button>
               )}
               {ultraWallet.error && <div className="text-red-600 text-sm mt-2">{ultraWallet.error}</div>}
             </CardBody>
@@ -175,7 +182,14 @@ const ProfilePage: React.FC = () => {
                   <Button className="w-full" variant="outline" onClick={ultraWallet.disconnect} loading={ultraWallet.isLoading}>Déconnecter</Button>
                 </>
               ) : (
-                <Button className="w-full" variant="outline" onClick={ultraWallet.connect} loading={ultraWallet.isLoading}>Connecter le wallet Ultra</Button>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => ultraWallet.connect()}
+                  loading={ultraWallet.isLoading}
+                >
+                  Connecter le wallet Ultra
+                </Button>
               )}
               {ultraWallet.error && <div className="text-red-600 text-sm mt-2">{ultraWallet.error}</div>}
             </div>

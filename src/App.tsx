@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { TranslationProvider } from './contexts/TranslationContext';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import MissionsPage from './pages/MissionsPage';
@@ -16,23 +17,25 @@ import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/missions" element={<MissionsPage />} />
-          <Route path="/missions/:id" element={<MissionDetailPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/manage-missions" element={<ManageMissionsPage />} />
-          <Route path="/my-missions" element={<MyMissionsPage />} />
-          <Route path="/payments" element={<PaymentsPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-        </Routes>
-      </Layout>
-    </AuthProvider>
+    <TranslationProvider>
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/missions" element={<MissionsPage />} />
+            <Route path="/missions/:id" element={<MissionDetailPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/manage-missions" element={<ManageMissionsPage />} />
+            <Route path="/my-missions" element={<MyMissionsPage />} />
+            <Route path="/payments" element={<PaymentsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
+    </TranslationProvider>
   );
 }
 

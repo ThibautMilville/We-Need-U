@@ -18,6 +18,7 @@ import {
   Mail
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from '../contexts/TranslationContext';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -26,7 +27,7 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState<'fr' | 'en'>('fr');
+  const { currentLang, setCurrentLang, t } = useTranslation();
   
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
@@ -59,37 +60,37 @@ const Header: React.FC = () => {
     if (!user) {
       // Menu pour les utilisateurs non connectés
       return [
-        { name: 'Accueil', href: '/', key: 'home', icon: Home },
-        { name: 'Missions', href: '/missions', key: 'missions', icon: Briefcase },
-        { name: 'À propos', href: '/about', key: 'about', icon: Info },
-        { name: 'Contact', href: '/contact', key: 'contact', icon: Mail },
+        { name: t('nav.home'), href: '/', key: 'home', icon: Home },
+        { name: t('nav.missions'), href: '/missions', key: 'missions', icon: Briefcase },
+        { name: t('nav.about'), href: '/about', key: 'about', icon: Info },
+        { name: t('nav.contact'), href: '/contact', key: 'contact', icon: Mail },
       ];
     }
 
     const commonItems = [
-      { name: 'Accueil', href: '/', key: 'home', icon: Home },
-      { name: 'Missions', href: '/missions', key: 'missions', icon: Briefcase },
+      { name: t('nav.home'), href: '/', key: 'home', icon: Home },
+      { name: t('nav.missions'), href: '/missions', key: 'missions', icon: Briefcase },
     ];
 
     switch (user.role) {
       case 'admin':
         return [
           ...commonItems,
-          { name: 'Dashboard', href: '/dashboard', key: 'dashboard' },
-          { name: 'Gérer', href: '/manage-missions', key: 'manage' },
-          { name: 'Paiements', href: '/payments', key: 'payments' },
+          { name: t('nav.dashboard'), href: '/dashboard', key: 'dashboard', icon: Zap },
+          { name: t('nav.manage'), href: '/manage-missions', key: 'manage', icon: Zap },
+          { name: t('nav.payments'), href: '/payments', key: 'payments', icon: Wallet },
         ];
       case 'manager':
         return [
           ...commonItems,
-          { name: 'Dashboard', href: '/dashboard', key: 'dashboard' },
-          { name: 'Validation', href: '/manage-missions', key: 'manage' },
+          { name: t('nav.dashboard'), href: '/dashboard', key: 'dashboard', icon: Zap },
+          { name: t('nav.manage'), href: '/manage-missions', key: 'manage', icon: Zap },
         ];
       case 'user':
         return [
           ...commonItems,
-          { name: 'Mes missions', href: '/my-missions', key: 'my-missions' },
-          { name: 'Paiements', href: '/payments', key: 'payments' },
+          { name: t('nav.my-missions'), href: '/my-missions', key: 'my-missions', icon: Briefcase },
+          { name: t('nav.payments'), href: '/payments', key: 'payments', icon: Wallet },
         ];
       default:
         return commonItems;
@@ -112,6 +113,9 @@ const Header: React.FC = () => {
           <path d='M18,0 L18,24 M0,12 L36,12' stroke='#fff' strokeWidth='4' />
           <path d='M18,0 L18,24 M0,12 L36,12' stroke='#C8102E' strokeWidth='2.4' />
         </svg>
+      ),
+      de: (
+        <span className="text-lg">🇩🇪</span>
       ),
     };
     return flags[currentLang];
@@ -325,11 +329,11 @@ const Header: React.FC = () => {
               
               {isLangMenuOpen && (
                 <div className="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-xl py-2 border border-gray-200 z-[60]">
-                  {['fr', 'en'].map(lang => (
+                  {['fr', 'en', 'de'].map(lang => (
                     <button
                       key={lang}
                       onClick={() => {
-                        setCurrentLang(lang as 'fr' | 'en');
+                        setCurrentLang(lang as 'fr' | 'en' | 'de');
                         setIsLangMenuOpen(false);
                       }}
                       className={`w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center space-x-3 ${
@@ -345,16 +349,18 @@ const Header: React.FC = () => {
                             <rect width='12' height='24' fill='#002395' />
                             <rect x='12' width='12' height='24' fill='#fff' />
                           </svg>
-                        ) : (
+                        ) : lang === 'en' ? (
                           <svg className='w-4 h-3' viewBox='0 0 36 24'>
                             <rect width='36' height='24' fill='#012169' />
                             <path d='M0,0 L36,24 M36,0 L0,24' stroke='#fff' strokeWidth='2.4' />
                             <path d='M18,0 L18,24 M0,12 L36,12' stroke='#fff' strokeWidth='4' />
                             <path d='M18,0 L18,24 M0,12 L36,12' stroke='#C8102E' strokeWidth='2.4' />
                           </svg>
+                        ) : (
+                          <span className="text-lg">🇩🇪</span>
                         )}
                       </div>
-                      <span className="text-sm">{lang === 'fr' ? 'Français' : 'English'}</span>
+                      <span className="text-sm">{lang === 'fr' ? 'Français' : lang === 'en' ? 'English' : 'Deutsch'}</span>
                     </button>
                   ))}
                 </div>

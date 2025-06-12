@@ -82,7 +82,7 @@ const LoginPage: React.FC = () => {
           <Button
             variant="outline"
             className="w-full flex items-center justify-center mb-4"
-            onClick={ultraWallet.connect}
+            onClick={() => ultraWallet.connect()}
             loading={ultraWallet.isLoading}
             disabled={!ultraWallet.isInstalled}
           >
