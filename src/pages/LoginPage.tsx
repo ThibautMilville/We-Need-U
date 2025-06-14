@@ -33,6 +33,26 @@ const LoginPage: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
+  // Redirection automatique si le wallet est déjà connecté
+  React.useEffect(() => {
+    if (ultraWallet.isConnected && !user) {
+      navigate('/dashboard');
+    }
+  }, [ultraWallet.isConnected, user, navigate]);
+
+  // Fonction pour gérer la connexion wallet avec redirection
+  const handleWalletConnect = async () => {
+    try {
+      const success = await ultraWallet.connect();
+      if (success) {
+        // Redirection vers la page admin après connexion wallet réussie
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Erreur de connexion wallet:', error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -46,7 +66,7 @@ const LoginPage: React.FC = () => {
       if (userRole === 'admin') {
         navigate('/dashboard');
       } else {
-        navigate('/');
+      navigate('/');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur de connexion');
@@ -264,7 +284,7 @@ const LoginPage: React.FC = () => {
 
       <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl w-full">
-          {/* Header */}
+        {/* Header */}
           <div className="text-center mb-12">
             {/* Bouton retour à l'accueil */}
             <div className="absolute top-8 left-8">
@@ -299,7 +319,7 @@ const LoginPage: React.FC = () => {
             <div className="animate-fade-in-up">
               <h2 className="text-2xl font-semibold text-white text-center mb-8">
                 Choisissez votre rôle
-              </h2>
+          </h2>
               <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 {Object.entries(roleConfig).map(([key, config]) => {
                   const IconComponent = config.icon;
@@ -311,12 +331,13 @@ const LoginPage: React.FC = () => {
                         relative group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:-translate-y-2
                         bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 hover:border-white/40
                         hover:bg-white/20 hover:shadow-2xl hover:shadow-purple-500/25
+                        h-[420px] flex flex-col
                       `}
                     >
                       {/* Gradient overlay */}
                       <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}></div>
                       
-                      <div className="relative z-10">
+                      <div className="relative z-10 flex flex-col h-full">
                         {/* Icon */}
                         <div className={`w-16 h-16 ${config.iconBg} rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300`}>
                           <IconComponent className={`w-8 h-8 ${config.textColor}`} />
@@ -327,56 +348,60 @@ const LoginPage: React.FC = () => {
                           {config.title}
                         </h3>
 
-                        {/* Description */}
-                        <p className="text-gray-300 text-center mb-6">
-                          {config.description}
-                        </p>
+                        {/* Description - hauteur fixe pour alignement */}
+                        <div className="h-12 flex items-center justify-center mb-6">
+                          <p className="text-gray-300 text-center">
+                            {config.description}
+                          </p>
+                        </div>
 
-                        {/* Features */}
-                        <ul className="space-y-2 mb-6">
-                          {config.features.map((feature, index) => (
-                            <li key={index} className="flex items-center text-sm text-gray-400">
-                              <div className={`w-2 h-2 rounded-full ${config.color.includes('red') ? 'bg-red-400' : config.color.includes('amber') ? 'bg-amber-400' : 'bg-emerald-400'} mr-3`}></div>
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
+                        {/* Features - flex-grow pour occuper l'espace disponible */}
+                        <div className="flex-grow">
+                          <ul className="space-y-2 mb-6">
+                            {config.features.map((feature, index) => (
+                              <li key={index} className="flex items-center text-sm text-gray-400">
+                                <div className={`w-2 h-2 rounded-full ${config.color.includes('red') ? 'bg-red-400' : config.color.includes('amber') ? 'bg-amber-400' : 'bg-emerald-400'} mr-3 flex-shrink-0`}></div>
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                                                 {/* CTA */}
-                         <div className="space-y-3">
-                           <div className="flex items-center justify-center text-white group-hover:text-purple-200 transition-colors duration-300">
-                             <span className="font-medium">Se connecter</span>
-                             <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                           </div>
-                           <button
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               openSignupModal(key as 'admin' | 'manager' | 'user');
-                             }}
-                             className="w-full text-sm text-gray-300 hover:text-white transition-colors duration-200 underline"
-                           >
-                             S'inscrire comme {config.title.toLowerCase()}
-                           </button>
-                         </div>
+                        {/* CTA - toujours en bas */}
+                        <div className="space-y-3 mt-auto">
+                          <div className="flex items-center justify-center text-white group-hover:text-purple-200 transition-colors duration-300">
+                            <span className="font-medium">Se connecter</span>
+                            <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openSignupModal(key as 'admin' | 'manager' | 'user');
+                            }}
+                            className="w-full text-sm text-gray-300 hover:text-white transition-colors duration-200 underline"
+                          >
+                            S'inscrire comme {config.title.toLowerCase()}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
                 })}
-              </div>
+        </div>
 
               {/* Wallet Connection */}
               <div className="mt-12 max-w-md mx-auto">
                 <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-                  <Button
-                    variant="outline"
+          <Button
+            variant="outline"
                     className="w-full flex items-center justify-center bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50"
-                    onClick={() => ultraWallet.connect()}
-                    loading={ultraWallet.isLoading}
-                    disabled={!ultraWallet.isInstalled}
-                  >
+                    onClick={handleWalletConnect}
+            loading={ultraWallet.isLoading}
+            disabled={!ultraWallet.isInstalled}
+          >
                     <Wallet className="w-5 h-5 mr-3" />
-                    {ultraWallet.isConnected ? 'Wallet connecté' : 'Se connecter avec Ultra Wallet'}
-                  </Button>
+                    {ultraWallet.isConnected ? 'Wallet connecté - Accéder au dashboard' : 'Se connecter avec Ultra Wallet'}
+          </Button>
                   {ultraWallet.error && (
                     <div className="text-red-400 text-sm mt-3 text-center">{ultraWallet.error}</div>
                   )}
@@ -490,7 +515,7 @@ const LoginPage: React.FC = () => {
                       <p className="text-sm">
                         ⚠️ Les comptes {signupData.role === 'admin' ? 'administrateur' : 'gestionnaire'} nécessitent une validation manuelle.
                       </p>
-                    </div>
+              </div>
                   )}
 
                   <Button
@@ -500,7 +525,7 @@ const LoginPage: React.FC = () => {
                     disabled={!signupData.firstName || !signupData.lastName || !signupData.email || !signupData.password || !signupData.confirmPassword}
                   >
                     S'inscrire
-                  </Button>
+            </Button>
                 </form>
 
                 {/* Lien vers connexion */}
@@ -554,37 +579,37 @@ const LoginPage: React.FC = () => {
                   <p className="text-gray-300">
                     {roleConfig[selectedUserType].description}
                   </p>
-                </div>
+          </div>
 
                 {/* Formulaire */}
                 <form className="space-y-6" onSubmit={handleSubmit}>
-                  {error && (
+            {error && (
                     <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl backdrop-blur-sm">
-                      {error}
-                    </div>
-                  )}
+                {error}
+              </div>
+            )}
 
                                      <div>
-                     <Input
-                       label="Email"
-                       type="email"
-                       value={email}
-                       onChange={(e) => setEmail(e.target.value)}
-                       required
-                       placeholder="votre@email.com"
+            <Input
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="votre@email.com"
                        variant="dark"
                        className="bg-white/10 border-white/30 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-400/50"
-                     />
+            />
                    </div>
 
                    <div className="relative">
-                     <Input
-                       label="Mot de passe"
+            <Input
+              label="Mot de passe"
                        type={showPassword ? "text" : "password"}
-                       value={password}
-                       onChange={(e) => setPassword(e.target.value)}
-                       required
-                       placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
                        variant="dark"
                        className="bg-white/10 border-white/30 text-white placeholder-gray-400 focus:border-purple-400 focus:ring-purple-400/50 pr-12"
                      />
@@ -597,18 +622,18 @@ const LoginPage: React.FC = () => {
                     </button>
                   </div>
 
-                  <Button
-                    type="submit"
+            <Button
+              type="submit"
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
-                    loading={loginLoading}
-                    disabled={!email || !password}
-                  >
-                    Se connecter
-                  </Button>
-                </form>
+              loading={loginLoading}
+              disabled={!email || !password}
+            >
+              Se connecter
+            </Button>
+          </form>
 
                                  {/* Lien vers inscription */}
-                 <div className="mt-6 text-center">
+          <div className="mt-6 text-center">
                    <button
                      onClick={() => setIsSignupMode(true)}
                      className="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm"
@@ -620,16 +645,16 @@ const LoginPage: React.FC = () => {
                  {/* Footer */}
                  <div className="mt-8 text-center">
                    <p className="text-xs text-gray-400">
-                     En vous connectant, vous acceptez nos{' '}
+              En vous connectant, vous acceptez nos{' '}
                      <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors duration-200">
-                       Conditions d'utilisation
-                     </a>{' '}
-                     et notre{' '}
+                Conditions d'utilisation
+              </a>{' '}
+              et notre{' '}
                      <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors duration-200">
-                       Politique de confidentialité
-                     </a>
-                   </p>
-                 </div>
+                Politique de confidentialité
+              </a>
+            </p>
+          </div>
               </div>
             </div>
           )}

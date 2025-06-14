@@ -87,8 +87,8 @@ const PaymentsPage: React.FC = () => {
 
       // Données simulées des transactions
       setTransactions([
-        {
-          id: '1',
+    {
+      id: '1',
           type: 'expense',
           amount: 1500,
           description: 'Paiement mission développement app mobile',
@@ -97,9 +97,9 @@ const PaymentsPage: React.FC = () => {
           status: 'completed',
           createdAt: '2024-01-25T14:30:00Z',
           category: 'Mission Payment'
-        },
-        {
-          id: '2',
+    },
+    {
+      id: '2',
           type: 'expense',
           amount: 800,
           description: 'Paiement mission design UI/UX',
@@ -108,9 +108,9 @@ const PaymentsPage: React.FC = () => {
           status: 'pending',
           createdAt: '2024-01-25T11:15:00Z',
           category: 'Mission Payment'
-        },
-        {
-          id: '3',
+    },
+    {
+      id: '3',
           type: 'income',
           amount: 5000,
           description: 'Financement mensuel Ultra Times',
@@ -385,10 +385,10 @@ const PaymentsPage: React.FC = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 Gestion des paiements
-              </h1>
-              <p className="text-gray-600">
+          </h1>
+          <p className="text-gray-600">
                 Suivi des transactions et gestion du wallet Ultra Times
               </p>
             </div>
@@ -447,8 +447,8 @@ const PaymentsPage: React.FC = () => {
                     <CheckCircle className="w-6 h-6 text-green-600" />
                   </div>
                 </div>
-              </CardBody>
-            </Card>
+            </CardBody>
+          </Card>
 
             <Card className="card-hover">
               <CardBody className="p-6">
@@ -467,8 +467,8 @@ const PaymentsPage: React.FC = () => {
                     <Clock className="w-6 h-6 text-yellow-600" />
                   </div>
                 </div>
-              </CardBody>
-            </Card>
+            </CardBody>
+          </Card>
 
             <Card className="card-hover">
               <CardBody className="p-6">
@@ -486,9 +486,9 @@ const PaymentsPage: React.FC = () => {
                     <AlertTriangle className="w-6 h-6 text-red-600" />
                   </div>
                 </div>
-              </CardBody>
-            </Card>
-          </div>
+            </CardBody>
+          </Card>
+        </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -525,12 +525,12 @@ const PaymentsPage: React.FC = () => {
           {/* Répartition du wallet (Donut) */}
           <div>
             <Card className="card-hover">
-              <CardHeader>
+          <CardHeader>
                 <h2 className="text-xl font-semibold text-gray-900 flex items-center">
                   <PieChart className="w-5 h-5 mr-2 text-purple-500" />
                   Répartition du wallet
                 </h2>
-              </CardHeader>
+          </CardHeader>
               <CardBody className="p-6">
                 {walletData && (
                   <>
@@ -538,7 +538,7 @@ const PaymentsPage: React.FC = () => {
                     
                     {/* Légende */}
                     <div className="mt-6 space-y-3">
-                      <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                           <span className="text-sm text-gray-600">Disponible</span>
@@ -572,8 +572,8 @@ const PaymentsPage: React.FC = () => {
                 )}
               </CardBody>
             </Card>
-          </div>
-        </div>
+                  </div>
+                </div>
 
         {/* Transactions récentes */}
         <div className="mt-8">
@@ -654,9 +654,9 @@ const PaymentsPage: React.FC = () => {
                     </div>
                   );
                 })}
-              </div>
-            </CardBody>
-          </Card>
+            </div>
+          </CardBody>
+        </Card>
         </div>
       </div>
     </div>
