@@ -9,6 +9,8 @@ import MissionDetailPage from './pages/MissionDetailPage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import ManageMissionsPage from './pages/ManageMissionsPage';
+import ManageUsersPage from './pages/ManageUsersPage';
+import PublicProfilePage from './pages/PublicProfilePage';
 import MyMissionsPage from './pages/MyMissionsPage';
 import PaymentsPage from './pages/PaymentsPage';
 import LoginPage from './pages/LoginPage';
@@ -28,6 +30,8 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/manage-missions" element={<ManageMissionsPage />} />
+            <Route path="/manage-users" element={<ManageUsersPage />} />
+            <Route path="/profile/:userId" element={<PublicProfilePage />} />
             <Route path="/my-missions" element={<MyMissionsPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/about" element={<AboutPage />} />

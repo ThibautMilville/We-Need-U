@@ -75,9 +75,9 @@ const Header: React.FC = () => {
     switch (user.role) {
       case 'admin':
         return [
-          ...commonItems,
           { name: t('nav.dashboard'), href: '/dashboard', key: 'dashboard', icon: Zap },
           { name: t('nav.manage'), href: '/manage-missions', key: 'manage', icon: Zap },
+          { name: 'Gestion utilisateurs', href: '/manage-users', key: 'manage-users', icon: User },
           { name: t('nav.payments'), href: '/payments', key: 'payments', icon: Wallet },
         ];
       case 'manager':
@@ -115,7 +115,11 @@ const Header: React.FC = () => {
         </svg>
       ),
       de: (
-        <span className="text-lg">🇩🇪</span>
+        <svg className='w-5 h-3' viewBox='0 0 36 24'>
+          <rect width='36' height='8' fill='#000' />
+          <rect y='8' width='36' height='8' fill='#DD0000' />
+          <rect y='16' width='36' height='8' fill='#FFCE00' />
+        </svg>
       ),
     };
     return flags[currentLang];
@@ -148,6 +152,8 @@ const Header: React.FC = () => {
       breadcrumbItems.push({ name: 'Mes missions', path: '/my-missions' });
     } else if (pathSegments[0] === 'manage-missions') {
       breadcrumbItems.push({ name: 'Gérer les missions', path: '/manage-missions' });
+    } else if (pathSegments[0] === 'manage-users') {
+      breadcrumbItems.push({ name: 'Gestion utilisateurs', path: '/manage-users' });
     } else if (pathSegments[0] === 'payments') {
       breadcrumbItems.push({ name: 'Paiements', path: '/payments' });
     } else if (pathSegments[0] === 'about') {
