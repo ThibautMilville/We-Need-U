@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Eye, Calendar, Users, DollarSign, MapPin, Clock, AlertTriangle, Filter, Search, BarChart3, TrendingUp, Target, Zap } from 'lucide-react';
+import { Navigate } from 'react-router-dom';
+import { Plus, Edit, Trash2, Eye, Calendar, Users, DollarSign, MapPin, Clock, AlertTriangle, Filter, Search, BarChart3, TrendingUp, Target, Zap, Briefcase } from 'lucide-react';
 import Card, { CardBody, CardHeader } from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
 import { Textarea } from '../components/ui/Input';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Mission {
   id: string;
@@ -21,6 +23,13 @@ interface Mission {
 }
 
 const ManageMissionsPage: React.FC = () => {
+  const { user } = useAuth();
+  
+  // Protection d'accès : seuls les administrateurs et gestionnaires peuvent accéder à cette page
+  if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
+    return <Navigate to="/" replace />;
+  }
+
   const [missions, setMissions] = useState<Mission[]>([
     {
       id: '1',

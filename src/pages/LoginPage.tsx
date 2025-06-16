@@ -28,10 +28,25 @@ const LoginPage: React.FC = () => {
   });
   const ultraWallet = useUltraWallet();
 
-  // Redirect if already logged in
-  if (user) {
-    return <Navigate to="/" replace />;
-  }
+  // Tous les useEffect doivent être en haut, avant tout return conditionnel
+  
+  // Redirection automatique après login réussi
+  React.useEffect(() => {
+    if (user && !isLoading) {
+      console.log('Redirecting user with role:', user.role);
+      const timer = setTimeout(() => {
+        if (user.role === 'admin') {
+          navigate('/dashboard', { replace: true });
+        } else if (user.role === 'manager') {
+          navigate('/manager-dashboard', { replace: true });
+        } else {
+          navigate('/', { replace: true });
+        }
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [user, isLoading, navigate]);
 
   // Redirection automatique si le wallet est déjà connecté
   React.useEffect(() => {
@@ -39,6 +54,19 @@ const LoginPage: React.FC = () => {
       navigate('/dashboard');
     }
   }, [ultraWallet.isConnected, user, navigate]);
+
+  // Afficher écran de transition si utilisateur connecté
+  if (user && !isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirection en cours...</p>
+          <p className="text-sm text-gray-500 mt-2">Connecté en tant que {user.role}</p>
+        </div>
+      </div>
+    );
+  }
 
   // Fonction pour gérer la connexion wallet avec redirection
   const handleWalletConnect = async () => {
@@ -61,17 +89,8 @@ const LoginPage: React.FC = () => {
     try {
       await login(email, password);
       
-      // Attendre un peu pour que le contexte soit mis à jour
-      setTimeout(() => {
-        // Redirection selon le rôle utilisateur réel (pas selectedUserType)
-        if (email === 'admin@ultra.io') {
-          navigate('/dashboard');
-        } else if (email === 'manager@ultra.io') {
-          navigate('/manager-dashboard');
-        } else {
-          navigate('/');
-        }
-      }, 100);
+      // Laisser React traiter le state update, puis rediriger
+      // La redirection se fera via le conditional rendering avec Navigate
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur de connexion');
     } finally {
@@ -189,7 +208,7 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || loginLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
         {/* Particules animées en arrière-plan */}

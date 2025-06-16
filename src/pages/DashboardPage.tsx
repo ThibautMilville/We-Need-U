@@ -72,20 +72,29 @@ const DashboardPage: React.FC = () => {
   const [recentRequests, setRecentRequests] = useState<RecentRequest[]>([]);
   const [missionOverview, setMissionOverview] = useState<MissionOverview[]>([]);
   const [loading, setLoading] = useState(true);
+  const [redirecting, setRedirecting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [requestsPerPage] = useState(5);
 
   // Rediriger les gestionnaires vers leur dashboard dédié
   useEffect(() => {
     if (user?.role === 'manager') {
+      setRedirecting(true);
       navigate('/manager-dashboard', { replace: true });
       return;
     }
   }, [user, navigate]);
 
-  // Ne pas charger les données si c'est un gestionnaire
-  if (user?.role === 'manager') {
-    return null;
+  // Afficher un écran de chargement pendant la redirection
+  if (redirecting || user?.role === 'manager') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirection vers votre dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   useEffect(() => {

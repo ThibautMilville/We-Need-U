@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Shield, Users, User, Check, X, Eye, Mail, Calendar, AlertTriangle, Search, Filter, ExternalLink } from 'lucide-react';
 import Card, { CardBody, CardHeader } from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
+import { useAuth } from '../contexts/AuthContext';
 
 interface UserAccount {
   id: string;
@@ -20,6 +21,13 @@ interface UserAccount {
 }
 
 const ManageUsersPage: React.FC = () => {
+  const { user } = useAuth();
+  
+  // Protection d'accès : seuls les administrateurs peuvent accéder à cette page
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
   const [users, setUsers] = useState<UserAccount[]>([
     {
       id: '1',

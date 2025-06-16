@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type UserRole = 'admin' | 'manager' | 'contributor';
+export type UserRole = 'admin' | 'manager' | 'user';
 
 export interface User {
   id: string;
@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: '3',
         name: 'John Doe',
         email: 'user@ultra.io',
-        role: 'contributor',
+        role: 'user',
         avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
         walletAddress: '0x9876...5432'
       }

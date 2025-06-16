@@ -86,7 +86,7 @@ const Header: React.FC = () => {
           { name: 'Mes Entités', href: '/manager-entities', key: 'manager-entities', icon: Briefcase },
           { name: t('nav.manage'), href: '/manage-missions', key: 'manage', icon: Zap },
         ];
-      case 'contributor':
+      case 'user':
         return [
           ...commonItems,
           { name: t('nav.my-missions'), href: '/my-missions', key: 'my-missions', icon: Briefcase },
