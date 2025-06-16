@@ -187,110 +187,122 @@ const ManageMissionsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header moderne */}
         <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Gestion des missions
-              </h1>
-              <p className="text-gray-600">
-                Créez et gérez vos missions ({missions.length} mission{missions.length > 1 ? 's' : ''})
-              </p>
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center">
+                  <Briefcase className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    Gestion des missions
+                  </h1>
+                  <p className="text-gray-600">
+                    Créez et gérez vos missions ({missions.length} mission{missions.length > 1 ? 's' : ''})
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3 mt-4 lg:mt-0">
+                <Button variant="outline" size="sm">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Statistiques
+                </Button>
+                <Button onClick={openCreateModal} size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nouvelle mission
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-3 mt-4 lg:mt-0">
-              <Button variant="outline" className="flex items-center space-x-2">
-                <BarChart3 className="w-4 h-4" />
-                <span>Statistiques</span>
-              </Button>
-              <Button onClick={openCreateModal} className="flex items-center space-x-2 bg-primary-600 hover:bg-primary-700">
-                <Plus className="w-4 h-4" />
-                <span>Nouvelle mission</span>
-              </Button>
+
+            {/* Recherche et filtres dans le header */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Rechercher une mission..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option value="all">Tous les statuts</option>
+                  <option value="open">Ouverte</option>
+                  <option value="closed">Fermée</option>
+                  <option value="completed">Terminée</option>
+                </select>
+                <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option value="all">Toutes catégories</option>
+                  <option value="dev">Développement</option>
+                  <option value="design">Design</option>
+                  <option value="marketing">Marketing</option>
+                </select>
+                <Button variant="outline" size="sm">
+                  <Filter className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Statistiques rapides */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="card-hover">
-              <CardBody className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">Total missions</p>
-                    <p className="text-3xl font-bold text-gray-900">{missions.length}</p>
-                  </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Target className="w-6 h-6 text-blue-600" />
-                  </div>
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Total missions</p>
+                  <p className="text-2xl font-bold text-gray-900">{missions.length}</p>
                 </div>
-              </CardBody>
-            </Card>
-
-            <Card className="card-hover">
-              <CardBody className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">Missions ouvertes</p>
-                    <p className="text-3xl font-bold text-green-600">
-                      {missions.filter(m => m.status === 'open').length}
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-green-600" />
-                  </div>
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                  <Target className="w-6 h-6 text-blue-600" />
                 </div>
-              </CardBody>
-            </Card>
-
-            <Card className="card-hover">
-              <CardBody className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">Candidats totaux</p>
-                    <p className="text-3xl font-bold text-purple-600">
-                      {missions.reduce((sum, m) => sum + m.currentCandidates, 0)}
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-
-            <Card className="card-hover">
-              <CardBody className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">Récompenses totales</p>
-                    <p className="text-3xl font-bold text-yellow-600">
-                      {missions.reduce((sum, m) => sum + m.reward, 0)} UOS
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-yellow-600" />
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-
-          {/* Barre de recherche et filtres */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Rechercher une mission..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
+              </div>
             </div>
-            <Button variant="outline" className="flex items-center space-x-2">
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </Button>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Missions ouvertes</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {missions.filter(m => m.status === 'open').length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-xl flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Candidats totaux</p>
+                  <p className="text-2xl font-bold text-purple-600">
+                    {missions.reduce((sum, m) => sum + m.currentCandidates, 0)}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center">
+                  <Users className="w-6 h-6 text-purple-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Récompenses totales</p>
+                  <p className="text-2xl font-bold text-orange-600">
+                    {missions.reduce((sum, m) => sum + m.reward, 0)} UOS
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center">
+                  <DollarSign className="w-6 h-6 text-orange-600" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

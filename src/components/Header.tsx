@@ -58,7 +58,7 @@ const Header: React.FC = () => {
 
   const getNavigationItems = () => {
     if (!user) {
-      // Menu pour les utilisateurs non connectés
+      // Menu pour les contributeurs non connectés
       return [
         { name: t('nav.home'), href: '/', key: 'home', icon: Home },
         { name: t('nav.missions'), href: '/missions', key: 'missions', icon: Briefcase },
@@ -77,16 +77,16 @@ const Header: React.FC = () => {
         return [
           { name: t('nav.dashboard'), href: '/dashboard', key: 'dashboard', icon: Zap },
           { name: t('nav.manage'), href: '/manage-missions', key: 'manage', icon: Zap },
-          { name: 'Gestion utilisateurs', href: '/manage-users', key: 'manage-users', icon: User },
+          { name: 'Gestion contributeurs', href: '/manage-users', key: 'manage-users', icon: User },
           { name: t('nav.payments'), href: '/payments', key: 'payments', icon: Wallet },
         ];
       case 'manager':
         return [
-          ...commonItems,
-          { name: t('nav.dashboard'), href: '/dashboard', key: 'dashboard', icon: Zap },
+          { name: 'Dashboard Manager', href: '/manager-dashboard', key: 'manager-dashboard', icon: Zap },
+          { name: 'Mes Entités', href: '/manager-entities', key: 'manager-entities', icon: Briefcase },
           { name: t('nav.manage'), href: '/manage-missions', key: 'manage', icon: Zap },
         ];
-      case 'user':
+      case 'contributor':
         return [
           ...commonItems,
           { name: t('nav.my-missions'), href: '/my-missions', key: 'my-missions', icon: Briefcase },
@@ -146,6 +146,12 @@ const Header: React.FC = () => {
       }
     } else if (pathSegments[0] === 'dashboard') {
       breadcrumbItems.push({ name: 'Dashboard', path: '/dashboard' });
+    } else if (pathSegments[0] === 'manager-dashboard') {
+      breadcrumbItems.push({ name: 'Dashboard Manager', path: '/manager-dashboard' });
+    } else if (pathSegments[0] === 'manager-entities') {
+      breadcrumbItems.push({ name: 'Mes Entités', path: '/manager-entities' });
+    } else if (pathSegments[0] === 'manager-team') {
+      breadcrumbItems.push({ name: 'Mon Équipe', path: '/manager-team' });
     } else if (pathSegments[0] === 'profile') {
       breadcrumbItems.push({ name: 'Profil', path: '/profile' });
     } else if (pathSegments[0] === 'my-missions') {
@@ -153,7 +159,7 @@ const Header: React.FC = () => {
     } else if (pathSegments[0] === 'manage-missions') {
       breadcrumbItems.push({ name: 'Gérer les missions', path: '/manage-missions' });
     } else if (pathSegments[0] === 'manage-users') {
-      breadcrumbItems.push({ name: 'Gestion utilisateurs', path: '/manage-users' });
+      breadcrumbItems.push({ name: 'Gestion contributeurs', path: '/manage-users' });
     } else if (pathSegments[0] === 'payments') {
       breadcrumbItems.push({ name: 'Paiements', path: '/payments' });
     } else if (pathSegments[0] === 'about') {

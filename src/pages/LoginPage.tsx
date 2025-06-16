@@ -61,13 +61,17 @@ const LoginPage: React.FC = () => {
     try {
       await login(email, password);
       
-      // Redirection selon le rôle
-      const userRole = selectedUserType;
-      if (userRole === 'admin') {
-        navigate('/dashboard');
-      } else {
-      navigate('/');
-      }
+      // Attendre un peu pour que le contexte soit mis à jour
+      setTimeout(() => {
+        // Redirection selon le rôle utilisateur réel (pas selectedUserType)
+        if (email === 'admin@ultra.io') {
+          navigate('/dashboard');
+        } else if (email === 'manager@ultra.io') {
+          navigate('/manager-dashboard');
+        } else {
+          navigate('/');
+        }
+      }, 100);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur de connexion');
     } finally {
@@ -159,7 +163,7 @@ const LoginPage: React.FC = () => {
       borderColor: 'border-red-200 hover:border-red-300',
       textColor: 'text-red-700',
       iconBg: 'bg-red-100',
-      features: ['Gestion des utilisateurs', 'Configuration système', 'Rapports avancés']
+              features: ['Gestion des contributeurs', 'Configuration système', 'Rapports avancés']
     },
     manager: {
       title: 'Gestionnaire',
@@ -173,7 +177,7 @@ const LoginPage: React.FC = () => {
       features: ['Validation des missions', 'Gestion des équipes', 'Suivi des performances']
     },
     user: {
-      title: 'Utilisateur',
+              title: 'Contributeur',
       description: 'Participation aux missions',
       icon: User,
       color: 'from-emerald-500 to-teal-600',

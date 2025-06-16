@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type UserRole = 'admin' | 'manager' | 'user';
+export type UserRole = 'admin' | 'manager' | 'contributor';
 
 export interface User {
   id: string;
@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: '3',
         name: 'John Doe',
         email: 'user@ultra.io',
-        role: 'user',
+        role: 'contributor',
         avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
         walletAddress: '0x9876...5432'
       }
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(foundUser);
       localStorage.setItem('weneedu_user', JSON.stringify(foundUser));
     } else {
-      throw new Error('Utilisateur non trouvé');
+      throw new Error('Contributeur non trouvé');
     }
     
     setIsLoading(false);

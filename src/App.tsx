@@ -7,6 +7,11 @@ import HomePage from './pages/HomePage';
 import MissionsPage from './pages/MissionsPage';
 import MissionDetailPage from './pages/MissionDetailPage';
 import DashboardPage from './pages/DashboardPage';
+import ManagerDashboardPage from './pages/ManagerDashboardPage';
+import ManagerEntitiesPage from './pages/ManagerEntitiesPage';
+import ManagerTeamPage from './pages/ManagerTeamPage';
+import ManagerReportsPage from './pages/ManagerReportsPage';
+import EntityManagementPage from './pages/EntityManagementPage';
 import ProfilePage from './pages/ProfilePage';
 import ManageMissionsPage from './pages/ManageMissionsPage';
 import ManageUsersPage from './pages/ManageUsersPage';
@@ -28,6 +33,11 @@ function App() {
             <Route path="/missions" element={<MissionsPage />} />
             <Route path="/missions/:id" element={<MissionDetailPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/manager-dashboard" element={<ManagerDashboardPage />} />
+            <Route path="/manager-entities" element={<ManagerEntitiesPage />} />
+            <Route path="/manager-entities/:entityId" element={<EntityManagementPage />} />
+            <Route path="/manager-team" element={<ManagerTeamPage />} />
+            <Route path="/manager-reports" element={<ManagerReportsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/manage-missions" element={<ManageMissionsPage />} />
             <Route path="/manage-users" element={<ManageUsersPage />} />

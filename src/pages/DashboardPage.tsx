@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Users, 
   Briefcase, 
@@ -67,12 +67,26 @@ interface MissionOverview {
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentRequests, setRecentRequests] = useState<RecentRequest[]>([]);
   const [missionOverview, setMissionOverview] = useState<MissionOverview[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [requestsPerPage] = useState(5);
+
+  // Rediriger les gestionnaires vers leur dashboard dédié
+  useEffect(() => {
+    if (user?.role === 'manager') {
+      navigate('/manager-dashboard', { replace: true });
+      return;
+    }
+  }, [user, navigate]);
+
+  // Ne pas charger les données si c'est un gestionnaire
+  if (user?.role === 'manager') {
+    return null;
+  }
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -397,7 +411,7 @@ const DashboardPage: React.FC = () => {
               <CardBody className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">Utilisateurs totaux</p>
+                    <p className="text-sm font-medium text-gray-600 mb-1">Contributeurs totaux</p>
                     <p className="text-3xl font-bold text-gray-900">{stats.totalUsers.toLocaleString()}</p>
                     <div className="flex items-center mt-2">
                       <ArrowUpRight className="w-4 h-4 text-green-500 mr-1" />
@@ -682,7 +696,7 @@ const DashboardPage: React.FC = () => {
                     <div className="text-center">
                       <Users className="w-8 h-8 text-gray-400 group-hover:text-primary-600 mx-auto mb-2" />
                       <h3 className="font-semibold text-gray-900 group-hover:text-primary-600">
-                        Gérer les utilisateurs
+                                                  Gérer les contributeurs
                       </h3>
                       <p className="text-sm text-gray-600 mt-1">
                         Approuver les demandes

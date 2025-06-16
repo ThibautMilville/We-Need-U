@@ -120,40 +120,107 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-24">
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
+      {/* Hero Section with Dynamic Background */}
+      <div className="relative overflow-hidden min-h-screen flex items-center">
+        {/* Modern animated background */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10" />
           <div 
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 bg-cover bg-center bg-fixed"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23667eea' fill-opacity='0.1'%3E%3Cpath d='M50 15L60 35L80 35L65 50L70 70L50 60L30 70L35 50L20 35L40 35Z'/%3E%3C/g%3E%3C/svg%3E")`,
-              backgroundSize: '100px 100px'
+              backgroundImage: `url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&h=1080&fit=crop&crop=center')`
             }}
           />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-blue-900/80 to-purple-900/70" />
+          
+          {/* Interactive particles */}
+          <div className="absolute inset-0">
+            <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-cyan-400/40 rounded-full animate-ping" />
+            <div className="absolute top-3/4 right-1/4 w-4 h-4 bg-purple-400/50 rounded-full animate-bounce" style={{animationDelay: '1s'}} />
+            <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-pink-400/60 rounded-full animate-pulse" style={{animationDelay: '2s'}} />
+            <div className="absolute top-1/2 right-1/3 w-5 h-5 bg-blue-400/30 rounded-full animate-ping" style={{animationDelay: '0.5s'}} />
+            <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-green-400/40 rounded-full animate-bounce" style={{animationDelay: '1.5s'}} />
+          </div>
+          
+          {/* Communication symbols floating */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-20 left-10 opacity-20">
+              <Mail className="w-12 h-12 text-blue-300 animate-float" />
+            </div>
+            <div className="absolute top-40 right-20 opacity-20">
+              <MessageCircle className="w-16 h-16 text-purple-300 animate-float" style={{animationDelay: '1s'}} />
+            </div>
+            <div className="absolute bottom-40 left-20 opacity-20">
+              <Phone className="w-10 h-10 text-cyan-300 animate-float" style={{animationDelay: '2s'}} />
+            </div>
+          </div>
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
-            <div className="inline-flex items-center space-x-3 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-8 shadow-lg border border-gray-200">
+            <div className="inline-flex items-center space-x-3 bg-white/20 backdrop-blur-md rounded-full px-8 py-4 mb-12 shadow-2xl border border-white/30 animate-fade-in-up">
               <img 
                 src="/logo-ut.png" 
                 alt="Ultra Logo" 
-                className="w-8 h-8 object-contain"
+                className="w-10 h-10 object-contain animate-pulse"
               />
-              <span className="text-gray-700 font-semibold">Contactez WeNeedU</span>
+              <span className="text-white font-bold text-lg">Contactez WeNeedU</span>
+              <MessageCircle className="w-6 h-6 text-cyan-300 animate-bounce" />
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-8">
-              <span className="bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-800 bg-clip-text text-transparent">
+            <h1 className="text-6xl md:text-8xl font-bold mb-12 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+              <span className="bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent drop-shadow-2xl">
                 Parlons Gaming
               </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-white/90 mb-16 max-w-5xl mx-auto leading-relaxed animate-fade-in-up" style={{animationDelay: '0.4s'}}>
               Une question ? Une suggestion ? Notre équipe est là pour vous accompagner 
-              dans votre aventure Web3 gaming.
+              dans votre aventure Web3 gaming avec Ultra.
             </p>
+            
+            {/* Quick contact buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+              <a
+                href="mailto:contact@weneedu.io"
+                className="inline-flex items-center px-8 py-4 bg-white/20 backdrop-blur-md rounded-xl text-white font-semibold hover:bg-white/30 transition-all duration-300 border border-white/30 shadow-xl hover:scale-105"
+              >
+                <Mail className="w-5 h-5 mr-3" />
+                Email direct
+              </a>
+              <a
+                href="#contact-form"
+                className="inline-flex items-center px-8 py-4 bg-cyan-500/20 backdrop-blur-md rounded-xl text-white font-semibold hover:bg-cyan-500/30 transition-all duration-300 border border-cyan-400/30 shadow-xl hover:scale-105"
+              >
+                <Send className="w-5 h-5 mr-3" />
+                Formulaire
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -194,7 +261,7 @@ const ContactPage: React.FC = () => {
       </div>
 
       {/* Contact Form & Info */}
-      <div className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
+      <div id="contact-form" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Form */}

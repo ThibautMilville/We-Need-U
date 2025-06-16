@@ -168,7 +168,7 @@ const ManageUsersPage: React.FC = () => {
       case 'user':
         return {
           icon: User,
-          label: 'Utilisateur',
+          label: 'Contributeur',
           color: 'bg-emerald-100 text-emerald-700',
           iconColor: 'text-emerald-600'
         };
@@ -231,10 +231,10 @@ const ManageUsersPage: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Gestion des utilisateurs
+                            Gestion des contributeurs
           </h1>
           <p className="text-gray-600">
-            Gérez les comptes utilisateurs et les demandes d'inscription
+                          Gérez les comptes contributeurs et les demandes d'inscription
           </p>
         </div>
 
@@ -321,7 +321,7 @@ const ManageUsersPage: React.FC = () => {
                   <option value="all">Tous les rôles</option>
                   <option value="admin">Administrateurs</option>
                   <option value="manager">Gestionnaires</option>
-                  <option value="user">Utilisateurs</option>
+                  <option value="user">Contributeurs</option>
                 </select>
                 <select
                   value={filterStatus}
@@ -342,7 +342,7 @@ const ManageUsersPage: React.FC = () => {
         <Card>
           <CardHeader>
             <h2 className="text-xl font-semibold">
-              Utilisateurs ({filteredUsers.length})
+              Contributeurs ({filteredUsers.length})
             </h2>
           </CardHeader>
           <CardBody>
